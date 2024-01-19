@@ -1,78 +1,78 @@
-// Package main ZeroBot-Plugin main file
-package main
+//包件主文件
+包装分组
 
-import (
-	"encoding/json"
-	"flag"
-	"fmt"
-	"math/rand"
-	"os"
-	"runtime"
-	"strconv"
-	"strings"
-	"time"
+进口(
+	                                       "encoding/json"                                       "encoding/json"
+	                                     "flag"                                     "flag"
+	                                   "fmt"                                   "fmt"
+	                                "数学/兰德"                                "数学/兰德"
+	                             "os"                             "os"
+	                          "runtime"                          "runtime"
+	                      "strconv"                      "strconv"
+	                   "strings"                   "strings"
+	                "time"                "time"
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/console" // 更改控制台属性
+	_ "吉特布网/弗罗泰克/ZERbob/控制台"              // 更改控制台属性"github.com/FloatTech/ZeroBot-Plugin/console" // 更改控制台属性
 
-	"github.com/FloatTech/ZeroBot-Plugin/kanban" // 打印 banner
+	         "吉特布网/弗罗泰克/零博特-普尔金/坎班"          // 打印 banner"github.com/FloatTech/ZeroBot-Plugin/kanban" // 打印 banner
 
-	// ---------以下插件均可通过前面加 // 注释，注释后停用并不加载插件--------- //
-	// ----------------------插件优先级按顺序从高到低---------------------- //
-	//                                                                  //
-	//                                                                  //
-	//                                                                  //
-	//                                                                  //
-	//                                                                  //
-	// ----------------------------高优先级区---------------------------- //
+	// ---------以下插件均可通过前面加 // 注释，注释后停用并不加载插件--------- //// ---------以下插件均可通过前面加 // 注释，注释后停用并不加载插件--------- //
+	// ----------------------插件优先级按顺序从高到低---------------------- //// ----------------------插件优先级按顺序从高到低---------------------- //
+	//                                                                  ////                                                                  //
+	//                                                                  ////                                                                  //
+	//                                                                  ////                                                                  //
+	//                                                                  ////                                                                  //
+	//                                                                  ////                                                                  //
+	// ----------------------------高优先级区---------------------------- //// ----------------------------高优先级区---------------------------- //
 	// vvvvvvvvvvvvvvvvvvvvvvvvvvvv高优先级区vvvvvvvvvvvvvvvvvvvvvvvvvvvv //
 	//               vvvvvvvvvvvvvv高优先级区vvvvvvvvvvvvvv               //
-	//                      vvvvvvv高优先级区vvvvvvv                      //
-	//                          vvvvvvvvvvvvvv                          //
-	//                               vvvv                               //
+	//                      vvvvvvv高优先级区vvvvvvv                      ////                      vvvvvvv高优先级区vvvvvvv                      //
+	//                          vvvvvvvvvvvvvv                          ////                          vvvvvvvvvvvvvv                          //
+	//                               vvvv                               ////                               vvvv                               //
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antiabuse" // 违禁词
+	_ "吉特布网/弗罗特泰克/零博-普卢金/插件/反滥用"        // 违禁词"github.com/FloatTech/ZeroBot-Plugin/plugin/antiabuse" // 违禁词
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chat" // 基础词库
+	_ "吉特布.com/弗罗特理工/ZEROBUIN/插件/聊天" 
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/sleepmanage" // 统计睡眠时间
+	_        "吉特布网/弗罗特泰克/零插孔/插件/睡眠管理"       // 统计睡眠时间"吉特布网/弗罗特泰克/零插孔/插件/睡眠管理"  // 统计睡眠时间
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/atri" // ATRI词库
+	_       "吉特布网/弗罗特技术公司/零博特-普卢金/塞丁/阿特里"      // ATRI词库
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/manager" // 群管
+	_     "吉特布.com/弗罗特理工/ZEROBUIN/插件/管理器"    // 群管
 
-	_ "github.com/FloatTech/zbputils/job" // 定时指令触发器
+	_ "通用网/通用技术/Zbputies/工作"  // 定时指令触发器"通用网/通用技术/Zbputies/工作"  // 定时指令触发器
 
-	//                               ^^^^                               //
-	//                          ^^^^^^^^^^^^^^                          //
-	//                      ^^^^^^^高优先级区^^^^^^^                      //
-	//               ^^^^^^^^^^^^^^高优先级区^^^^^^^^^^^^^^               //
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^高优先级区^^^^^^^^^^^^^^^^^^^^^^^^^^^^ //
-	// ----------------------------高优先级区---------------------------- //
-	//                                                                  //
-	//                                                                  //
-	//                                                                  //
-	//                                                                  //
-	//                                                                  //
-	// ----------------------------中优先级区---------------------------- //
-	// vvvvvvvvvvvvvvvvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvvvvvvvvvvvvvvvv //
-	//               vvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvv               //
-	//                      vvvvvvv中优先级区vvvvvvv                      //
-	//                          vvvvvvvvvvvvvv                          //
-	//                               vvvv                               //
+	//                               ^^^^                               ////                               ^^^^                               //
+	//                          ^^^^^^^^^^^^^^                          ////                          ^^^^^^^^^^^^^^                          //
+	//                      ^^^^^^^高优先级区^^^^^^^                      ////                      ^^^^^^^高优先级区^^^^^^^                      //
+	//               ^^^^^^^^^^^^^^高优先级区^^^^^^^^^^^^^^               ////               ^^^^^^^^^^^^^^高优先级区^^^^^^^^^^^^^^               //
+	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^高优先级区^^^^^^^^^^^^^^^^^^^^^^^^^^^^ //// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^高优先级区^^^^^^^^^^^^^^^^^^^^^^^^^^^^ //
+	// ----------------------------高优先级区---------------------------- //// ----------------------------高优先级区---------------------------- //
+	//                                                                  ////                                                                  //
+	//                                                                  ////                                                                  //
+	//                                                                  ////                                                                  ////                                                                  ////                                                                  //
+	//                                                                  ////                                                                  ////                                                                  ////                                                                  //
+	//                                                                  ////                                                                  ////                                                                  ////                                                                  //
+	// ----------------------------中优先级区---------------------------- //// ----------------------------中优先级区---------------------------- //// ----------------------------中优先级区---------------------------- //// ----------------------------中优先级区---------------------------- //
+	// vvvvvvvvvvvvvvvvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvvvvvvvvvvvvvvvv //// vvvvvvvvvvvvvvvvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvvvvvvvvvvvvvvvv //// vvvvvvvvvvvvvvvvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvvvvvvvvvvvvvvvv //// vvvvvvvvvvvvvvvvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvvvvvvvvvvvvvvvv //
+	//               vvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvv               ////               vvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvv               ////               vvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvv               ////               vvvvvvvvvvvvvv中优先级区vvvvvvvvvvvvvv               //
+	//                      vvvvvvv中优先级区vvvvvvv                      ////                      vvvvvvv中优先级区vvvvvvv                      //
+	//                          vvvvvvvvvvvvvv                          ////                          vvvvvvvvvvvvvv                          //
+	//                               vvvv                               ////                               vvvv                               //
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/ahsai"            // ahsai tts
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aifalse"          // 服务器监控
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aipaint"          // ai绘图
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aiwife"           // 随机老婆
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/alipayvoice"      // 支付宝到账语音
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/autowithdraw"     // 触发者撤回时也自动撤回
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baidu"            // 百度一下
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baiduaudit"       // 百度内容审核
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/base16384"        // base16384加解密
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/base64gua"        // base64卦加解密
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baseamasiro"      // base天城文加解密
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bilibili"         // b站相关
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bookreview"       // 哀伤雪刃吧推书记录
+	_ "吉特布网/弗罗特泰克/零博博-普卢金/插件/阿塞"              // ahsai tts"github.com/FloatTech/ZeroBot-Plugin/plugin/ahsai"            // ahsai tts
+	_ "吉特布网/弗罗特技术公司/零博-普卢金/插件/艾弗尔斯"            // 服务器监控"github.com/FloatTech/ZeroBot-Plugin/plugin/aifalse"          // 服务器监控
+	_ "吉特布网/弗罗泰克/零博特-普卢金/插件/艾莱提"           // ai绘图"github.com/FloatTech/ZeroBot-Plugin/plugin/aipaint"          // ai绘图
+	_ "吉特布.网/弗罗特理工/零博博-普卢金/插件/爱妻"            // 随机老婆"github.com/FloatTech/ZeroBot-Plugin/plugin/aiwife"           // 随机老婆
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/alipayvoice"      // 支付宝到账语音"github.com/FloatTech/ZeroBot-Plugin/plugin/alipayvoice"      // 支付宝到账语音
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/autowithdraw"     // 触发者撤回时也自动撤回"github.com/FloatTech/ZeroBot-Plugin/plugin/autowithdraw"     // 触发者撤回时也自动撤回
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baidu"            // 百度一下"github.com/FloatTech/ZeroBot-Plugin/plugin/baidu"            // 百度一下
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baiduaudit"       // 百度内容审核"github.com/FloatTech/ZeroBot-Plugin/plugin/baiduaudit"       // 百度内容审核
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/base16384"        // base16384加解密"github.com/FloatTech/ZeroBot-Plugin/plugin/base16384"        // base16384加解密
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/base64gua"        // base64卦加解密"github.com/FloatTech/ZeroBot-Plugin/plugin/base64gua"        // base64卦加解密
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baseamasiro"      // base天城文加解密"github.com/FloatTech/ZeroBot-Plugin/plugin/baseamasiro"      // base天城文加解密
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bilibili"         // b站相关"github.com/FloatTech/ZeroBot-Plugin/plugin/bilibili"         // b站相关
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bookreview"       // 哀伤雪刃吧推书记录"github.com/FloatTech/ZeroBot-Plugin/plugin/bookreview"       // 哀伤雪刃吧推书记录
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/cangtoushi"       // 藏头诗
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chess"            // 国际象棋
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/choose"           // 选择困难症帮手
